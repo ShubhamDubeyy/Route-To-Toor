@@ -173,7 +173,7 @@ Besides scanning for ports an attacker might also run a scan of running hosts by
 -   `**10.0.0.0/8**`
 
 Useful Links : https://ibreak.software/2012/11/cross-site-port-attacks-xspa-part-1/
-## **Cloud provider**
+## **Cloud Attacks**
 
 With practically every business running on some kind of a cloud network and database, securing the cloud has never been more important, here are the most important reasons why.  With 96% of all enterprises in the U.S. Using some form of cloud computing, it’s clear that this technology has experienced a rapid proliferation in the past few years.
 
