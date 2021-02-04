@@ -24,6 +24,8 @@ When the manipulated request goes to the server, the server-side code picks up t
 
 Accessing internal resources can mean a couple of different things. It can be achieved by accessing the `/admin` panel that is only accessible from within the internal network. Reading files from the server. This can be done using the file schema (`file://path/to/file`).
 
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/etc.png)
+
 #### **Internal pages**
 
 Some common exploits for accessing internal pages include:  
@@ -33,7 +35,6 @@ https://target.com/page?url=http://127.0.0.1/phpmyadmin
 https://target.com/page?url=http://127.0.0.1/pgadmin  
 https://target.com/page?url=http://127.0.0.1/any_interesting_page`
 
-![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/etc.png)
 
 #### **Internal files via URL scheme**
 
